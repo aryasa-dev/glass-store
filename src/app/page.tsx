@@ -1,4 +1,5 @@
-import { ShoppingBag, ArrowRight, ShieldCheck, Truck, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { ShoppingBag, ArrowRight, ShieldCheck, Truck, Sparkles, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -11,9 +12,13 @@ export default function Home() {
             <span>Storefront</span>
           </div>
           <nav className="flex items-center gap-4">
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-neutral-300 dark:border-neutral-700 text-xs font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-[#5433eb]" />
+              <span>Admin Panel</span>
+            </Link>
             <Button size="sm" className="gap-2">
               <ShoppingBag className="w-4 h-4" />
               Cart (0)

@@ -12,13 +12,17 @@ async function main() {
   console.log("Seeding database...");
 
   // 1. Create Admin User
+  const adminPasswordHash = "$2b$10$t.9jUq33atGF8vTg8uolr.MAlfjj2Iv.cM8KDqZ8qv0SYiN2PY.Bm"; // admin123
   const admin = await prisma.user.upsert({
     where: { email: "admin@store.local" },
-    update: {},
+    update: {
+      passwordHash: adminPasswordHash,
+      role: Role.ADMIN,
+    },
     create: {
       email: "admin@store.local",
       name: "Store Administrator",
-      passwordHash: "demo_hash_to_be_replaced",
+      passwordHash: adminPasswordHash,
       role: Role.ADMIN,
     },
   });
