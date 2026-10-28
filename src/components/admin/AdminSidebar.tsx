@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  FolderTree,
   Package,
   Calculator,
   ShoppingCart,
@@ -26,6 +27,11 @@ const navItems: NavItem[] = [
     label: "Dashboard",
     href: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    label: "Categories",
+    href: "/admin/categories",
+    icon: FolderTree,
   },
   {
     label: "Products",

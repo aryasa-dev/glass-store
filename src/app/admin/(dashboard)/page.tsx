@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { prisma } from "@/lib/prisma";
 import {
   Package,
@@ -6,22 +7,23 @@ import {
   ShoppingCart,
   TrendingUp,
   ArrowRight,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink,
+  FolderTree,
 } from "lucide-react";
 
 export const instant = false;
 
 export default async function AdminDashboardPage() {
+  await connection();
+
   const [
     productsCount,
+    categoriesCount,
     ordersCount,
     calculatorRulesCount,
     orders,
   ] = await Promise.all([
     prisma.product.count(),
+    prisma.category.count(),
     prisma.order.count(),
     prisma.calculatorRule.count(),
     prisma.order.findMany({
@@ -82,7 +84,7 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Revenue */}
+        {/* Volume */}
         <div className="bg-white rounded-[24px] p-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border border-[#ebebeb]/60">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-[#787574] uppercase tracking-wider">
@@ -100,7 +102,7 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Active Products */}
+        {/* Active Products & Categories */}
         <div className="bg-white rounded-[24px] p-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border border-[#ebebeb]/60">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-[#787574] uppercase tracking-wider">
@@ -114,7 +116,9 @@ export default async function AdminDashboardPage() {
             <span className="text-3xl font-extrabold text-[#000000]">
               {productsCount}
             </span>
-            <span className="text-xs text-neutral-500 font-medium">products</span>
+            <span className="text-xs text-neutral-500 font-medium">
+              across {categoriesCount} cat.
+            </span>
           </div>
         </div>
 
@@ -138,19 +142,38 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Navigation Quick Access Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <Link
+          href="/admin/categories"
+          className="bg-white rounded-[28px] p-6 border border-[#ebebeb]/70 hover:border-[#5433eb]/40 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(69,36,219,0.12)] transition-all group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-[#5433eb]/10 text-[#5433eb] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+            <FolderTree className="w-6 h-6" />
+          </div>
+          <h2 className="text-base font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
+            Categories
+          </h2>
+          <p className="text-xs text-[#787574] mt-1.5 leading-relaxed">
+            Manage product collections, descriptions, and cover imagery.
+          </p>
+          <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#5433eb]">
+            <span>View Categories</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
+
         <Link
           href="/admin/products"
           className="bg-white rounded-[28px] p-6 border border-[#ebebeb]/70 hover:border-[#5433eb]/40 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(69,36,219,0.12)] transition-all group"
         >
-          <div className="w-12 h-12 rounded-2xl bg-[#5433eb]/10 text-[#5433eb] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
             <Package className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
+          <h2 className="text-base font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
             Product Catalog
           </h2>
           <p className="text-xs text-[#787574] mt-1.5 leading-relaxed">
-            Manage glass types, thicknesses, SKU inventory, and product categories.
+            Manage glass types, thicknesses, SKU inventory, and base prices.
           </p>
           <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#5433eb]">
             <span>Open Catalog</span>
@@ -165,11 +188,11 @@ export default async function AdminDashboardPage() {
           <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
             <Calculator className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
+          <h2 className="text-base font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
             Calculator Rules
           </h2>
           <p className="text-xs text-[#787574] mt-1.5 leading-relaxed">
-            Configure m² base pricing, waste overhead multipliers, and thickness grading.
+            Configure m² base pricing, waste overhead factors, and thickness grading.
           </p>
           <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#5433eb]">
             <span>Manage Formulas</span>
@@ -184,7 +207,7 @@ export default async function AdminDashboardPage() {
           <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
             <ShoppingCart className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
+          <h2 className="text-base font-bold text-[#000000] group-hover:text-[#5433eb] transition-colors">
             Orders & Tracking
           </h2>
           <p className="text-xs text-[#787574] mt-1.5 leading-relaxed">
