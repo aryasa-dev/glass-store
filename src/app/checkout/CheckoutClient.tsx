@@ -143,7 +143,7 @@ export function CheckoutClient() {
   if (orderSuccess) {
     return (
       <div className="py-16 sm:py-24 max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="bg-white rounded-[28px] p-8 sm:p-12 shadow-[0_4px_24px_rgba(0,0,0,0.08)] border border-[#ebebeb] text-center space-y-8">
+        <div className="bg-white rounded-[28px] p-8 sm:p-12 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] border-0 text-center space-y-8">
           <div className="w-20 h-20 bg-[#f2f4f5] rounded-full flex items-center justify-center mx-auto shadow-inner text-[#5433eb]">
             <CheckCircle2 className="w-10 h-10" />
           </div>
@@ -177,8 +177,8 @@ export function CheckoutClient() {
             </div>
             <div className="flex justify-between items-center text-xs">
               <span className="text-[#787574]">Status</span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[11px] font-semibold">
-                <Clock className="w-3 h-3" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#f2f4f5] text-[#000000] border border-[#ebebeb] text-[11px] font-semibold">
+                <Clock className="w-3 h-3 text-[#5433eb]" />
                 Pending Verification
               </span>
             </div>
@@ -284,7 +284,7 @@ export function CheckoutClient() {
       {/* Main Grid: Form on Left, Order Summary on Right */}
       <form onSubmit={handleSubmitOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Customer Details Form (7 Cols) */}
-        <div className="lg:col-span-7 bg-white rounded-[28px] p-6 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#ebebeb] space-y-6">
+        <div className="lg:col-span-7 bg-white rounded-[28px] p-6 sm:p-8 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] border-0 space-y-6">
           <div className="border-b border-[#ebebeb] pb-4">
             <h2 className="text-lg font-bold text-[#000000] tracking-tight">
               1. Customer & Job Site Details
@@ -401,7 +401,7 @@ export function CheckoutClient() {
 
         {/* Order Summary Column (5 Cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white rounded-[28px] p-6 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#ebebeb] space-y-6">
+          <div className="bg-white rounded-[28px] p-6 sm:p-8 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] border-0 space-y-6">
             <div className="border-b border-[#ebebeb] pb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-[#000000] tracking-tight">

@@ -109,17 +109,17 @@ export function CartDrawer() {
                         </span>
                       )}
                       {item.chargeableAreaSqm && item.actualAreaSqm && item.chargeableAreaSqm > item.actualAreaSqm && (
-                        <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] tracking-tight">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] text-[#787574] border border-[#ebebeb] text-[10px] tracking-tight">
                           Min. {item.chargeableAreaSqm.toFixed(2)} m²
                         </span>
                       )}
                       {item.edgePolishing && (
-                        <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] tracking-tight">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] text-[#000000] border border-[#ebebeb] text-[10px] tracking-tight font-medium">
                           Flat Edge Polished
                         </span>
                       )}
                       {item.holesCount && item.holesCount > 0 ? (
-                        <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[10px] tracking-tight">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] text-[#000000] border border-[#ebebeb] text-[10px] tracking-tight font-medium">
                           {item.holesCount} Drilled Holes
                         </span>
                       ) : null}

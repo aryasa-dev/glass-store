@@ -195,24 +195,38 @@ export function GlassCalculator({
   const maxH = rule.maxHeightMm || 2400;
 
   const widthError = useMemo(() => {
-    if (!widthInput) return "Width is required";
+    if (!widthInput || widthInput.trim() === "") return "Width is required";
+    const val = parseFloat(widthInput);
+    if (isNaN(val)) return "Please enter a valid numeric value";
+    if (val <= 0) return "Dimension must be greater than zero";
     if (widthMm < minW)
-      return `Min width is ${unit === "cm" ? minW / 10 + " cm" : minW + " mm"}`;
+      return `Minimum width is ${unit === "cm" ? minW / 10 + " cm" : minW + " mm"}`;
     if (widthMm > maxW)
-      return `Max width is ${unit === "cm" ? maxW / 10 + " cm" : maxW + " mm"}`;
+      return `Maximum width is ${unit === "cm" ? maxW / 10 + " cm" : maxW + " mm"}`;
     return null;
   }, [widthInput, widthMm, minW, maxW, unit]);
 
   const heightError = useMemo(() => {
-    if (!heightInput) return "Height is required";
+    if (!heightInput || heightInput.trim() === "") return "Height is required";
+    const val = parseFloat(heightInput);
+    if (isNaN(val)) return "Please enter a valid numeric value";
+    if (val <= 0) return "Dimension must be greater than zero";
     if (heightMm < minH)
-      return `Min height is ${unit === "cm" ? minH / 10 + " cm" : minH + " mm"}`;
+      return `Minimum height is ${unit === "cm" ? minH / 10 + " cm" : minH + " mm"}`;
     if (heightMm > maxH)
-      return `Max height is ${unit === "cm" ? maxH / 10 + " cm" : maxH + " mm"}`;
+      return `Maximum height is ${unit === "cm" ? maxH / 10 + " cm" : maxH + " mm"}`;
     return null;
   }, [heightInput, heightMm, minH, maxH, unit]);
 
-  const isValid = !widthError && !heightError && quantity > 0;
+  const quantityError = useMemo(() => {
+    if (!quantity || isNaN(quantity) || quantity <= 0)
+      return "Quantity must be at least 1";
+    if (quantity > 200)
+      return "Maximum order per custom batch is 200 panels";
+    return null;
+  }, [quantity]);
+
+  const isValid = !widthError && !heightError && !quantityError && widthMm > 0 && heightMm > 0;
 
   // Selected Variant lookup for price adjustment
   const activeVariant = useMemo(() => {
@@ -324,7 +338,7 @@ export function GlassCalculator({
 
   return (
     <div
-      className={`bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#ebebeb] p-6 sm:p-8 max-w-xl w-full mx-auto transition-all ${className}`}
+      className={`bg-white rounded-[28px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] border-0 p-6 sm:p-8 max-w-xl w-full mx-auto transition-all ${className}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#ebebeb] pb-5 mb-6">
@@ -537,29 +551,44 @@ export function GlassCalculator({
 
         {/* Quantity and Area Summary */}
         <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-3">
-            <label className="text-xs font-semibold text-[#000000]">
-              Quantity:
-            </label>
-            <div className="flex items-center">
-              <button
-                type="button"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-9 h-9 rounded-full border border-[#ebebeb] bg-white flex items-center justify-center font-bold text-sm text-[#000000] hover:bg-[#f2f4f5] transition-colors cursor-pointer"
-              >
-                -
-              </button>
-              <span className="w-10 text-center font-bold text-sm text-[#000000]">
-                {quantity}
-              </span>
-              <button
-                type="button"
-                onClick={() => setQuantity(quantity + 1)}
-                className="w-9 h-9 rounded-full border border-[#ebebeb] bg-white flex items-center justify-center font-bold text-sm text-[#000000] hover:bg-[#f2f4f5] transition-colors cursor-pointer"
-              >
-                +
-              </button>
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <label className="text-xs font-semibold text-[#000000]">
+                Quantity:
+              </label>
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="w-9 h-9 rounded-full border border-[#ebebeb] bg-white flex items-center justify-center font-bold text-sm text-[#000000] hover:bg-[#f2f4f5] transition-colors cursor-pointer"
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  max={200}
+                  value={quantity || ""}
+                  onChange={(e) => {
+                    const parsed = parseInt(e.target.value, 10);
+                    setQuantity(isNaN(parsed) ? 0 : Math.max(0, Math.min(200, parsed)));
+                  }}
+                  className="w-12 text-center font-bold text-sm text-[#000000] bg-transparent border-0 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.min(200, q + 1))}
+                  className="w-9 h-9 rounded-full border border-[#ebebeb] bg-white flex items-center justify-center font-bold text-sm text-[#000000] hover:bg-[#f2f4f5] transition-colors cursor-pointer"
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
             </div>
+            {quantityError && (
+              <p className="text-[11px] text-red-500 font-medium">{quantityError}</p>
+            )}
           </div>
 
           {/* Area Metric Badge */}
@@ -568,8 +597,8 @@ export function GlassCalculator({
               Area: {actualAreaSqm.toFixed(3)} m²
             </div>
             {actualAreaSqm > 0 && actualAreaSqm < minChargeableArea && (
-              <div className="text-[10px] text-amber-600 font-medium flex items-center gap-1 justify-end">
-                <Info className="w-3 h-3" />
+              <div className="text-[10px] text-[#787574] font-medium flex items-center gap-1 justify-end">
+                <Info className="w-3 h-3 text-[#5433eb]" />
                 <span>Min. threshold {minChargeableArea} m² applies</span>
               </div>
             )}

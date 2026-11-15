@@ -133,8 +133,8 @@ export default async function Home() {
         <section className="max-w-[1200px] mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
             <div className="bg-white rounded-[28px] p-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border-0 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#5433eb]/10 text-[#5433eb] flex items-center justify-center">
-                <Ruler className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#f2f4f5] text-[#000000] flex items-center justify-center">
+                <Ruler className="w-6 h-6 text-[#5433eb]" />
               </div>
               <h3 className="font-bold text-sm text-[#000000]">CNC Diamond Polishing</h3>
               <p className="text-xs text-[#787574] leading-relaxed">
@@ -143,8 +143,8 @@ export default async function Home() {
             </div>
 
             <div className="bg-white rounded-[28px] p-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border-0 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <ShieldCheck className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#f2f4f5] text-[#000000] flex items-center justify-center">
+                <ShieldCheck className="w-6 h-6 text-[#000000]" />
               </div>
               <h3 className="font-bold text-sm text-[#000000]">Grade A Tempered Glass</h3>
               <p className="text-xs text-[#787574] leading-relaxed">
@@ -153,8 +153,8 @@ export default async function Home() {
             </div>
 
             <div className="bg-white rounded-[28px] p-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border-0 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
-                <Award className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#f2f4f5] text-[#000000] flex items-center justify-center">
+                <Award className="w-6 h-6 text-[#000000]" />
               </div>
               <h3 className="font-bold text-sm text-[#000000]">Direct Foundry Rates</h3>
               <p className="text-xs text-[#787574] leading-relaxed">
@@ -163,8 +163,8 @@ export default async function Home() {
             </div>
 
             <div className="bg-white rounded-[28px] p-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border-0 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                <Truck className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#f2f4f5] text-[#000000] flex items-center justify-center">
+                <Truck className="w-6 h-6 text-[#000000]" />
               </div>
               <h3 className="font-bold text-sm text-[#000000]">Secure Wooden Crates</h3>
               <p className="text-xs text-[#787574] leading-relaxed">

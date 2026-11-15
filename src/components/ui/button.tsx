@@ -13,15 +13,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex items-center justify-center rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5433eb]/30 disabled:pointer-events-none disabled:opacity-50",
           {
-            "bg-blue-600 text-white hover:bg-blue-700": variant === "default",
-            "border border-neutral-300 bg-transparent hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800":
+            "bg-[#5433eb] text-white hover:bg-[#4527cd] shadow-[0_4px_16px_rgba(84,51,235,0.3)]":
+              variant === "default",
+            "border border-[#ebebeb] bg-white text-[#000000] hover:bg-[#f2f4f5]":
               variant === "outline",
-            "hover:bg-neutral-100 dark:hover:bg-neutral-800": variant === "ghost",
-            "h-10 px-4 py-2 text-sm": size === "default",
-            "h-8 px-3 text-xs": size === "sm",
-            "h-12 px-6 text-base": size === "lg",
+            "hover:bg-[#f2f4f5] text-[#000000]": variant === "ghost",
+            "h-10 px-5 text-xs": size === "default",
+            "h-8 px-3.5 text-xs": size === "sm",
+            "h-12 px-6 text-sm": size === "lg",
           },
           className
         )}

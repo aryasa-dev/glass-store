@@ -32,7 +32,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Info Card (1 col) */}
           <div className="space-y-6">
-            <div className="bg-white rounded-[28px] p-8 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.06),0_2px_4px_-2px_rgba(0,0,0,0.06)] border border-[#ebebeb]/60 space-y-6">
+            <div className="bg-white rounded-[28px] p-8 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] border-0 space-y-6">
               <div>
                 <h3 className="font-bold text-base text-[#000000]">Foundry Showroom</h3>
                 <p className="text-xs text-[#787574] mt-1">
@@ -105,8 +105,8 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Form Card (2 cols, #ffffff, rounded-3xl, soft elevation) */}
-          <div className="lg:col-span-2 bg-white rounded-[32px] p-8 sm:p-10 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#ebebeb]/60">
+          {/* Form Card (2 cols, #ffffff, rounded-[28px], dual-layer soft elevation, border-0) */}
+          <div className="lg:col-span-2 bg-white rounded-[28px] p-8 sm:p-10 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1)] border-0">
             <div className="border-b border-[#ebebeb] pb-5 mb-6">
               <h2 className="text-xl font-bold text-[#000000]">Request a Custom Fabrication Quote</h2>
               <p className="text-xs text-[#787574] mt-1">

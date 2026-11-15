@@ -137,8 +137,8 @@ export default async function OrderConfirmationPage({
                     <Sparkles className="w-3.5 h-3.5" />
                     Fabrication Queued
                   </span>
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-[11px] font-semibold">
-                    <Clock className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#f2f4f5] text-[#000000] border border-[#ebebeb] text-[11px] font-semibold">
+                    <Clock className="w-3 h-3 text-[#5433eb]" />
                     {order.status}
                   </span>
                 </div>
