@@ -1,27 +1,32 @@
 "use client";
 
-import { useCart } from "@/context/CartContext";
-import { X, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useCartStore } from "@/store/cartStore";
+import { X, Trash2, ShoppingBag, ArrowRight, Layers, Ruler } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function CartDrawer() {
-  const {
-    items,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-    totalItemsCount,
-    subtotalAmount,
-    isCartOpen,
-    setIsCartOpen,
-  } = useCart();
+  const items = useCartStore((s) => s.items);
+  const isCartOpen = useCartStore((s) => s.isCartOpen);
+  const closeCart = useCartStore((s) => s.closeCart);
+  const removeItem = useCartStore((s) => s.removeItem);
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const totalCount = useCartStore((s) => s.getTotalCount());
+  const subtotal = useCartStore((s) => s.getSubtotal());
 
-  if (!isCartOpen) return null;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !isCartOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        onClick={() => setIsCartOpen(false)}
+        onClick={closeCart}
         className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
       />
 
@@ -33,12 +38,12 @@ export function CartDrawer() {
               <div className="w-8 h-8 rounded-full bg-[#5433eb]/10 text-[#5433eb] flex items-center justify-center">
                 <ShoppingBag className="w-4 h-4" />
               </div>
-              <h2 className="text-base font-semibold text-[#000000]">
-                Your Cart ({totalItemsCount})
+              <h2 className="text-base font-semibold text-[#000000] tracking-tight">
+                Your Cart ({totalCount})
               </h2>
             </div>
             <button
-              onClick={() => setIsCartOpen(false)}
+              onClick={closeCart}
               className="p-2 rounded-full text-neutral-400 hover:text-neutral-700 hover:bg-[#f2f4f5] transition-colors"
               aria-label="Close cart"
             >
@@ -53,10 +58,10 @@ export function CartDrawer() {
                 <div className="w-16 h-16 rounded-full bg-[#f2f4f5] flex items-center justify-center text-neutral-400">
                   <ShoppingBag className="w-8 h-8" />
                 </div>
-                <p className="text-sm text-[#787574]">Your cart is empty.</p>
+                <p className="text-sm text-[#787574] tracking-tight">Your cart is empty.</p>
                 <button
-                  onClick={() => setIsCartOpen(false)}
-                  className="text-xs font-semibold text-[#5433eb] hover:underline"
+                  onClick={closeCart}
+                  className="text-xs font-semibold text-[#5433eb] hover:underline tracking-tight"
                 >
                   Start configuring glass &rarr;
                 </button>
@@ -69,15 +74,20 @@ export function CartDrawer() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="text-sm font-semibold text-[#000000]">
-                        {item.productName}
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#5433eb] block">
+                        {item.type === "custom_glass" ? "Custom Fabricated Glass" : "Catalog Product"}
+                      </span>
+                      <h3 className="text-sm font-bold text-[#000000] tracking-tight">
+                        {item.name}
                       </h3>
-                      <p className="text-xs text-[#787574]">
-                        {item.glassType} &bull; {item.thicknessMm}mm
-                      </p>
+                      {item.variantName && (
+                        <p className="text-xs text-[#787574] tracking-tight">
+                          {item.variantName}
+                        </p>
+                      )}
                     </div>
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeItem(item.id)}
                       className="p-1 rounded-full text-neutral-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                       title="Remove item"
                     >
@@ -85,30 +95,36 @@ export function CartDrawer() {
                     </button>
                   </div>
 
-                  {/* Dimensions & Specs */}
-                  <div className="flex flex-wrap gap-1.5 text-[11px] text-neutral-600">
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] border border-[#ebebeb] font-medium">
-                      {item.widthMm}mm × {item.heightMm}mm
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] border border-[#ebebeb]">
-                      Area: {item.actualAreaSqm.toFixed(3)} m²
-                    </span>
-                    {item.chargeableAreaSqm > item.actualAreaSqm && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px]">
-                        Min. {item.chargeableAreaSqm.toFixed(2)} m²
-                      </span>
-                    )}
-                    {item.edgePolishing && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px]">
-                        Edge Polished
-                      </span>
-                    )}
-                    {item.holesCount && item.holesCount > 0 ? (
-                      <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[10px]">
-                        {item.holesCount} Holes
-                      </span>
-                    ) : null}
-                  </div>
+                  {/* Dimensions & Custom specifications if custom glass */}
+                  {item.type === "custom_glass" && (
+                    <div className="flex flex-wrap gap-1.5 text-[11px] text-neutral-600">
+                      {item.widthMm && item.heightMm && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] border border-[#ebebeb] font-semibold text-[#000000] tracking-tight">
+                          {item.widthMm}mm × {item.heightMm}mm
+                        </span>
+                      )}
+                      {item.actualAreaSqm && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#f2f4f5] border border-[#ebebeb] tracking-tight">
+                          Area: {item.actualAreaSqm.toFixed(3)} m²
+                        </span>
+                      )}
+                      {item.chargeableAreaSqm && item.actualAreaSqm && item.chargeableAreaSqm > item.actualAreaSqm && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] tracking-tight">
+                          Min. {item.chargeableAreaSqm.toFixed(2)} m²
+                        </span>
+                      )}
+                      {item.edgePolishing && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] tracking-tight">
+                          Flat Edge Polished
+                        </span>
+                      )}
+                      {item.holesCount && item.holesCount > 0 ? (
+                        <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[10px] tracking-tight">
+                          {item.holesCount} Drilled Holes
+                        </span>
+                      ) : null}
+                    </div>
+                  )}
 
                   {/* Pricing and Quantity controls */}
                   <div className="pt-2 border-t border-[#ebebeb] flex items-center justify-between text-xs">
@@ -119,7 +135,7 @@ export function CartDrawer() {
                       >
                         -
                       </button>
-                      <span className="w-6 text-center font-semibold text-neutral-900">
+                      <span className="w-6 text-center font-bold text-neutral-900 tracking-tight">
                         {item.quantity}
                       </span>
                       <button
@@ -131,10 +147,10 @@ export function CartDrawer() {
                     </div>
 
                     <div className="text-right">
-                      <div className="font-bold text-sm text-[#000000]">
+                      <div className="font-extrabold text-sm text-[#000000] tracking-tight">
                         ${item.totalPrice.toFixed(2)}
                       </div>
-                      <div className="text-[10px] text-[#787574]">
+                      <div className="text-[10px] text-[#787574] tracking-tight">
                         ${item.unitPrice.toFixed(2)} / unit
                       </div>
                     </div>
@@ -147,34 +163,37 @@ export function CartDrawer() {
           {/* Footer Checkout */}
           {items.length > 0 && (
             <div className="p-6 border-t border-[#ebebeb] space-y-4 bg-[#f2f4f5]/40">
-              <div className="space-y-1.5 text-xs text-neutral-600">
+              <div className="space-y-1.5 text-xs text-neutral-600 tracking-tight">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-neutral-900">
-                    ${subtotalAmount.toFixed(2)}
+                  <span className="font-bold text-neutral-900">
+                    ${subtotal.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Tax & Shipping</span>
-                  <span className="text-neutral-500">Calculated at checkout</span>
+                  <span>Estimated Freight</span>
+                  <span className="text-neutral-500 font-medium">
+                    {subtotal > 300 ? "Free Insured Crate" : "$35.00"}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-[#000000] pt-2 border-t border-[#ebebeb]">
-                  <span>Total Estimate</span>
-                  <span>${subtotalAmount.toFixed(2)}</span>
+                  <span>Subtotal Amount</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <button
-                  onClick={() => alert("Checkout flow will be integrated with order payment!")}
-                  className="w-full h-12 rounded-full bg-[#5433eb] hover:bg-[#4527cd] text-white text-xs font-semibold shadow-[0_8px_24px_rgba(84,51,235,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                <Link
+                  href="/checkout"
+                  onClick={closeCart}
+                  className="w-full h-12 rounded-full bg-[#5433eb] hover:bg-[#4527cd] text-white text-xs font-semibold shadow-[0_8px_24px_rgba(84,51,235,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer tracking-tight"
                 >
                   <span>Proceed to Checkout</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
                 <button
                   onClick={clearCart}
-                  className="w-full py-2 text-center text-[11px] text-neutral-500 hover:text-red-600 transition-colors"
+                  className="w-full py-2 text-center text-[11px] text-neutral-500 hover:text-red-600 transition-colors tracking-tight"
                 >
                   Clear Cart
                 </button>

@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, SlidersHorizontal, ArrowRight, Layers, Package, X } from "lucide-react";
+import { Search, SlidersHorizontal, ArrowRight, Layers, Package, X, ShoppingBag } from "lucide-react";
+import { useCartStore } from "@/store/cartStore";
 
 interface Category {
   id: string;
@@ -42,10 +43,35 @@ export function ProductCatalogClient({
   categories,
   initialCategorySlug,
 }: ProductCatalogClientProps) {
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
+
   const [selectedCategory, setSelectedCategory] = useState<string>(
     initialCategorySlug || "ALL"
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const handleAddStandard = (product: Product) => {
+    const firstVariant = product.variants[0];
+    const unitPrice =
+      Number(product.basePrice) +
+      (firstVariant ? Number(firstVariant.priceAdjustment) : 0);
+
+    addItem({
+      type: "standard_product",
+      productId: product.id,
+      variantId: firstVariant?.id,
+      name: product.name,
+      variantName: firstVariant ? firstVariant.name : "Standard Unit",
+      imageUrl: product.imageUrl,
+      unitPrice: unitPrice > 0 ? unitPrice : 45.0,
+      quantity: 1,
+      customSpecifications: {
+        note: "Pre-cut standard sample / catalog panel",
+      },
+    });
+    openCart();
+  };
 
   // Filtering products
   const filteredProducts = useMemo(() => {
@@ -217,22 +243,34 @@ export function ProductCatalogClient({
                   )}
 
                   {/* Price & Action footer */}
-                  <div className="pt-4 border-t border-[#ebebeb] flex items-center justify-between">
+                  <div className="pt-4 border-t border-[#ebebeb] flex items-center justify-between gap-2">
                     <div>
                       <span className="text-[10px] text-[#787574] block">Base rate</span>
-                      <span className="text-lg font-extrabold text-[#000000]">
+                      <span className="text-base font-extrabold text-[#000000]">
                         ${Number(product.basePrice).toFixed(2)}
-                        <span className="text-xs font-normal text-[#787574]"> /m²</span>
+                        <span className="text-[11px] font-normal text-[#787574]"> /m²</span>
                       </span>
                     </div>
 
-                    <Link
-                      href={`/?product=${product.slug}#calculator-section`}
-                      className="h-10 px-5 rounded-full bg-[#5433eb] hover:bg-[#4527cd] text-white text-xs font-semibold shadow-[0_4px_16px_rgba(84,51,235,0.3)] transition-all flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <span>Custom Cut</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleAddStandard(product)}
+                        title="Add standard panel to cart"
+                        className="h-9 px-3 rounded-full bg-[#f2f4f5] hover:bg-[#ebebeb] text-[#000000] text-xs font-semibold border border-[#ebebeb] transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5 text-[#5433eb]" />
+                        <span>Add</span>
+                      </button>
+
+                      <Link
+                        href={`/?product=${product.slug}#calculator-section`}
+                        className="h-9 px-3.5 rounded-full bg-[#5433eb] hover:bg-[#4527cd] text-white text-xs font-semibold shadow-[0_4px_16px_rgba(84,51,235,0.3)] transition-all flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>Custom</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>

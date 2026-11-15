@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useCart } from "@/context/CartContext";
+import { useCartStore } from "@/store/cartStore";
 import {
   Calculator,
   ShoppingBag,
@@ -119,7 +119,8 @@ export function GlassCalculator({
   calculatorRule = DEFAULT_CALCULATOR_RULE,
   className = "",
 }: GlassCalculatorProps) {
-  const { addToCart } = useCart();
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
   const rule = calculatorRule || DEFAULT_CALCULATOR_RULE;
 
   // Active available variants
@@ -287,10 +288,13 @@ export function GlassCalculator({
     e.preventDefault();
     if (!isValid) return;
 
-    addToCart({
+    addItem({
+      type: "custom_glass",
       productId,
-      productName,
-      variantName: activeVariant?.name || `${selectedGlassType} ${selectedThickness}mm`,
+      variantId: activeVariant?.id,
+      name: productName,
+      variantName:
+        activeVariant?.name || `${selectedGlassType} ${selectedThickness}mm`,
       glassType: selectedGlassType,
       thicknessMm: selectedThickness,
       widthMm,
@@ -299,7 +303,6 @@ export function GlassCalculator({
       actualAreaSqm,
       chargeableAreaSqm,
       unitPrice,
-      totalPrice: totalEstimate,
       quantity,
       edgePolishing,
       holesCount,
@@ -315,6 +318,7 @@ export function GlassCalculator({
     });
 
     setIsAdded(true);
+    openCart();
     setTimeout(() => setIsAdded(false), 2000);
   };
 
