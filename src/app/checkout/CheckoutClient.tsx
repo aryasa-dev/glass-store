@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ShoppingBag,
   ArrowLeft,
@@ -26,6 +27,7 @@ import { useCartStore } from "@/store/cartStore";
 import { createOrderAction } from "@/actions/checkout";
 
 export function CheckoutClient() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
@@ -125,13 +127,8 @@ export function CheckoutClient() {
       });
 
       if (res.success && res.orderNumber) {
-        setOrderSuccess({
-          orderNumber: res.orderNumber,
-          customerName: customerName.trim(),
-          totalAmount,
-          itemsCount: totalItemsCount,
-        });
         clearCart();
+        router.push(`/order-confirmation/${res.orderNumber}`);
       } else {
         setErrorMessage(res.error || "Failed to process order. Please try again.");
       }

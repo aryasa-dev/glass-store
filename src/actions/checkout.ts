@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
+import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 export interface CreateOrderItemInput {
   productId?: string;
@@ -31,6 +32,7 @@ export interface CreateOrderResult {
   success: boolean;
   orderNumber?: string;
   orderId?: string;
+  whatsAppUrl?: string;
   error?: string;
 }
 
@@ -54,10 +56,13 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Create
     : `${(customerPhone || "guest").replace(/[^0-9a-zA-Z]/g, "") || "customer"}@orders.local`;
 
   try {
-    // Generate human-friendly order number e.g. ORD-2026-XXXX
+    // Generate unique human-friendly order number: ORD-YYYYMMDD-XXXX
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const datePrefix = new Date().getFullYear();
-    const orderNumber = `ORD-${datePrefix}-${randomSuffix}`;
+    const orderNumber = `ORD-${year}${month}${day}-${randomSuffix}`;
 
     // Calculate subtotal
     const subtotal = items.reduce((acc, item) => acc + item.totalPrice, 0);
@@ -100,6 +105,19 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Create
       },
     });
 
+    const whatsAppUrl = generateWhatsAppOrderUrl({
+      orderNumber,
+      customerName: newOrder.customerName,
+      customerPhone: newOrder.customerPhone,
+      shippingAddress: newOrder.shippingAddress,
+      notes: newOrder.notes,
+      subtotal,
+      tax,
+      shippingCost,
+      totalAmount,
+      items: input.items,
+    });
+
     try {
       revalidatePath("/admin/orders");
       revalidatePath("/admin");
@@ -111,6 +129,7 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Create
       success: true,
       orderNumber: newOrder.orderNumber,
       orderId: newOrder.id,
+      whatsAppUrl,
     };
   } catch (error) {
     console.error("Order creation failed:", error);
