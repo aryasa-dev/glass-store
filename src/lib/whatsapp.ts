@@ -17,7 +17,7 @@ export interface WhatsAppOrderInput {
     widthMm?: number | null;
     heightMm?: number | null;
     calculatedAreaSqm?: number | null;
-    customSpecifications?: any;
+    customSpecifications?: unknown;
   }>;
 }
 
@@ -65,14 +65,14 @@ export function generateWhatsAppOrderUrl({
     }
 
     if (item.customSpecifications) {
-      const specs = item.customSpecifications as Record<string, any>;
+      const specs = item.customSpecifications as Record<string, unknown>;
       const details: string[] = [];
       if (specs.edgePolishing) details.push("Flat Polished Edges");
-      if (specs.holesCount && specs.holesCount > 0)
+      if (typeof specs.holesCount === "number" && specs.holesCount > 0)
         details.push(`${specs.holesCount} Drilled Holes`);
-      if (specs.thicknessMultiplier && specs.thicknessMultiplier > 1)
+      if (typeof specs.thicknessMultiplier === "number" && specs.thicknessMultiplier > 1)
         details.push(`Thickness Multiplier: ${specs.thicknessMultiplier}x`);
-      if (specs.note) details.push(specs.note);
+      if (specs.note && typeof specs.note === "string") details.push(specs.note);
       if (details.length > 0) {
         lines.push(`   ⚙️ Specs: ${details.join(", ")}`);
       }

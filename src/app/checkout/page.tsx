@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { PublicNavbar } from "@/components/common/PublicNavbar";
 import { PublicFooter } from "@/components/common/PublicFooter";
@@ -5,9 +6,19 @@ import { CheckoutClient } from "./CheckoutClient";
 
 export const instant = false;
 
-export const metadata = {
-  title: "Secure Checkout & Order Placement | Shop.",
-  description: "Confirm your custom cut glass panels, review dimensions and transit crating, and submit your order.",
+export const metadata: Metadata = {
+  title: "Secure Checkout & Order Placement",
+  description:
+    "Confirm your custom cut glass panels, review dimensions and transit crating, and submit your order.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  openGraph: {
+    title: "Secure Checkout & Order Placement | Shop.",
+    description: "Review your custom cut glass panels and submit your fabrication order.",
+    url: "/checkout",
+  },
 };
 
 export default async function CheckoutPage() {

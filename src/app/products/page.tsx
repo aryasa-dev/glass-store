@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { PublicNavbar } from "@/components/common/PublicNavbar";
@@ -7,9 +8,33 @@ import { Sparkles } from "lucide-react";
 
 export const instant = false;
 
-export const metadata = {
-  title: "Architectural Glass & Mirror Catalog | Shop.",
-  description: "Browse precision cut safety glass, fluted reeded panels, custom mirrors, and shower partitions.",
+export const metadata: Metadata = {
+  title: "Architectural Glass & Mirror Catalog",
+  description:
+    "Browse precision cut safety glass, fluted reeded panels, custom mirrors, and shower partitions with instant sizing tools.",
+  openGraph: {
+    title: "Architectural Glass & Mirror Catalog | Shop.",
+    description:
+      "Explore certified safety tempered glass, reeded textured panels, and frameless shower enclosures with custom sizing.",
+    url: "/products",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&h=630&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Shop. Architectural Glass Catalog",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Architectural Glass & Mirror Catalog | Shop.",
+    description:
+      "Browse precision cut safety glass, textured panels, and custom mirrors.",
+    images: [
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&h=630&q=80",
+    ],
+  },
 };
 
 export default async function ProductsPage({

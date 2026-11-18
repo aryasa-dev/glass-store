@@ -22,7 +22,7 @@ export interface CartItem {
   chargeableAreaSqm?: number;
   edgePolishing?: boolean;
   holesCount?: number;
-  customSpecifications?: Record<string, any>;
+  customSpecifications?: Record<string, unknown>;
 
   // Pricing & Quantity
   unitPrice: number;
@@ -48,7 +48,7 @@ export type AddToCartInput =
       chargeableAreaSqm: number;
       edgePolishing?: boolean;
       holesCount?: number;
-      customSpecifications?: Record<string, any>;
+      customSpecifications?: Record<string, unknown>;
       unitPrice: number;
       quantity?: number;
     }
@@ -61,7 +61,7 @@ export type AddToCartInput =
       imageUrl?: string | null;
       unitPrice: number;
       quantity?: number;
-      customSpecifications?: Record<string, any>;
+      customSpecifications?: Record<string, unknown>;
     };
 
 interface CartState {

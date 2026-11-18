@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { OrderStatus, PaymentStatus } from "@prisma/client";
+import { OrderStatus, PaymentStatus, Prisma } from "@prisma/client";
 import { generateWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 export interface CreateOrderItemInput {
@@ -16,7 +16,7 @@ export interface CreateOrderItemInput {
   widthMm?: number;
   heightMm?: number;
   calculatedAreaSqm?: number;
-  customSpecifications?: Record<string, any>;
+  customSpecifications?: Record<string, unknown>;
 }
 
 export interface CreateOrderInput {
@@ -96,7 +96,8 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Create
             widthMm: item.widthMm || null,
             heightMm: item.heightMm || null,
             calculatedAreaSqm: item.calculatedAreaSqm || null,
-            customSpecifications: item.customSpecifications || {},
+            customSpecifications:
+              (item.customSpecifications as Prisma.InputJsonValue) ?? {},
           })),
         },
       },

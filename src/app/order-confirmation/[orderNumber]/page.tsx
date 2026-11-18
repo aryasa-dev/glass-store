@@ -33,8 +33,16 @@ export async function generateMetadata({
 }) {
   const { orderNumber } = await params;
   return {
-    title: `Order Confirmation ${orderNumber} | Shop.`,
-    description: `Review your precision cut architectural glass order specifications and dispatch status.`,
+    title: `Order Confirmed: ${orderNumber}`,
+    description: `Review your precision cut architectural glass order specifications (${orderNumber}) and fabrication queue status.`,
+    robots: {
+      index: false,
+      follow: false,
+    },
+    openGraph: {
+      title: `Order Confirmed: ${orderNumber} | Shop.`,
+      description: `Review your precision cut architectural glass order specifications and fabrication queue status.`,
+    },
   };
 }
 

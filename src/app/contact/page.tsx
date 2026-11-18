@@ -1,11 +1,36 @@
+import type { Metadata } from "next";
 import { PublicNavbar } from "@/components/common/PublicNavbar";
 import { PublicFooter } from "@/components/common/PublicFooter";
 import { ContactForm } from "./ContactForm";
 import { Mail, Phone, MapPin, Clock, MessageCircle, Sparkles } from "lucide-react";
 
-export const metadata = {
-  title: "Contact & Commercial Glazing Inquiries | Shop.",
-  description: "Get in touch with our glass cutting technicians, submit architectural blueprints, or request freight quotes.",
+export const metadata: Metadata = {
+  title: "Contact & Commercial Glazing Inquiries",
+  description:
+    "Get in touch with our glass cutting technicians, submit architectural blueprints, or request freight quotes for custom panels.",
+  openGraph: {
+    title: "Contact & Commercial Glazing Inquiries | Shop.",
+    description:
+      "Connect with our glass engineering specialists for custom architectural blueprints, technical tolerances, and freight delivery logistics.",
+    url: "/contact",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&h=630&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Shop. Commercial Glazing Support",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact & Commercial Glazing Inquiries | Shop.",
+    description:
+      "Get in touch with our engineering team for precision cut glass solutions.",
+    images: [
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&h=630&q=80",
+    ],
+  },
 };
 
 export default function ContactPage() {

@@ -1,20 +1,40 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { PublicNavbar } from "@/components/common/PublicNavbar";
 import { PublicFooter } from "@/components/common/PublicFooter";
 import {
-  ShieldCheck,
-  Award,
-  Factory,
-  Cpu,
   Sparkles,
   ArrowRight,
   CheckCircle2,
-  Users,
 } from "lucide-react";
 
-export const metadata = {
-  title: "About Our Glass Foundry | Shop.",
-  description: "Learn about our precision CNC cutting machinery, safety certifications, and commitment to architectural glazing excellence.",
+export const metadata: Metadata = {
+  title: "About Our Glass Foundry",
+  description:
+    "Learn about our precision CNC cutting machinery, safety certifications, and commitment to architectural glazing excellence.",
+  openGraph: {
+    title: "About Our Glass Foundry | Shop.",
+    description:
+      "Precision CNC glass cutting, certified safety tempering, and direct-foundry architectural glazing code compliance.",
+    url: "/about",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&h=630&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Precision Architectural Glass Foundry",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Our Glass Foundry | Shop.",
+    description:
+      "Precision CNC glass fabrication and architectural panel engineering.",
+    images: [
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&h=630&q=80",
+    ],
+  },
 };
 
 export default function AboutPage() {

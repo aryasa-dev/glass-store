@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { GlassCalculator } from "@/components/calculator/GlassCalculator";
@@ -17,6 +18,35 @@ import {
 } from "lucide-react";
 
 export const instant = false;
+
+export const metadata: Metadata = {
+  title: "Precision Cut-to-Size Glass & Architectural Panels",
+  description:
+    "Instant online calculation and ordering for custom tempered safety glass, shower panels, polished mirrors, and architectural glazing with CNC precision.",
+  openGraph: {
+    title: "Precision Cut-to-Size Glass & Architectural Panels | Shop.",
+    description:
+      "Configure precision cut-to-size glass panels and mirrors with live square-meter calculation, edge polish choices, and direct foundry delivery.",
+    url: "/",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&h=630&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Custom Cut Architectural Glass Panels",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Precision Cut-to-Size Glass & Architectural Panels | Shop.",
+    description:
+      "Instant sizing calculator and direct foundry rates for custom cut tempered glass and mirrors.",
+    images: [
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&h=630&q=80",
+    ],
+  },
+};
 
 export default async function Home() {
   await connection();
